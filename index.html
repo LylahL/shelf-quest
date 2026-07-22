@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHELF QUEST — An Intern's Journey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d0b1f; --panel:#1a1730; --ink:#e8e6ff; --dim:#9b94c9;
+    --green:#5ee07a; --pink:#ff5fa2; --yellow:#ffd34e; --blue:#4ea8ff;
+    --red:#ff5b5b; --gold:#ffcf3f; --line:#37315e;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:
+      radial-gradient(circle at 20% 10%, #221b45 0, transparent 40%),
+      radial-gradient(circle at 80% 80%, #2a1640 0, transparent 45%),
+      var(--bg);
+    color:var(--ink);
+    font-family:'Press Start 2P', ui-monospace, Menlo, Consolas, monospace;
+    -webkit-font-smoothing:none; image-rendering:pixelated;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+  header{text-align:center;margin-bottom:18px}
+  h1{font-size:30px;line-height:1.4;margin:0 0 6px;color:var(--yellow);
+     text-shadow:3px 3px 0 var(--pink), 6px 6px 0 #00000055}
+  .sub{font-size:11px;color:var(--dim);line-height:1.8}
+  .hud{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:16px 0 6px;font-size:10px}
+  .hud .chip{background:var(--panel);border:2px solid var(--line);padding:8px 12px;border-radius:4px}
+  .hud b{color:var(--green)}
+  .bar{height:14px;background:#000;border:2px solid var(--line);border-radius:4px;max-width:560px;margin:8px auto 0;overflow:hidden}
+  .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--blue));transition:width .4s}
+
+  .map{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+  @media(max-width:760px){.map{grid-template-columns:1fr 1fr}}
+  .node{
+    position:relative;background:var(--panel);border:3px solid var(--line);
+    border-radius:8px;padding:16px 14px;cursor:pointer;text-align:center;
+    transition:transform .12s, box-shadow .12s, border-color .12s; min-height:150px;
+    display:flex;flex-direction:column;justify-content:center;gap:10px;
+  }
+  .node:hover{transform:translateY(-4px);box-shadow:0 8px 0 #00000066;border-color:var(--blue)}
+  .node .icon{font-size:34px;filter:drop-shadow(2px 2px 0 #00000088)}
+  .node .name{font-size:10px;line-height:1.6}
+  .node .tag{font-size:8px;color:var(--dim)}
+  .node.done{border-color:var(--green)}
+  .node.done::after{content:'✓ CLEARED';position:absolute;top:8px;right:8px;font-size:7px;color:var(--green)}
+  .node.boss{grid-column:1/-1;border-color:var(--red);background:linear-gradient(180deg,#2a1030,#1a0f28)}
+  .node.boss .icon{font-size:42px}
+  .node.boss .name{color:var(--red);font-size:13px}
+  .node.locked{opacity:.45;cursor:not-allowed}
+  .node.locked:hover{transform:none;box-shadow:none;border-color:var(--line)}
+  .lvlno{position:absolute;top:8px;left:8px;font-size:8px;color:var(--yellow)}
+
+  /* modal */
+  .scrim{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;padding:20px;z-index:20}
+  .scrim.open{display:flex}
+  .card{background:var(--panel);border:4px solid var(--blue);border-radius:10px;max-width:680px;width:100%;
+        padding:24px;box-shadow:0 12px 0 #00000088;max-height:88vh;overflow:auto;animation:pop .18s ease}
+  @keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+  .card h2{font-size:15px;color:var(--yellow);margin:0 0 4px;line-height:1.5}
+  .card .quip{font-size:9px;color:var(--dim);margin-bottom:16px}
+  .row{font-size:10px;line-height:1.9;margin:10px 0;border-left:3px solid var(--line);padding-left:12px}
+  .row b{color:var(--green)}
+  .punch{background:#000;border:2px dashed var(--pink);border-radius:6px;padding:12px;margin:16px 0;
+         font-size:10px;line-height:1.8;color:var(--pink)}
+  .btn{font-family:inherit;font-size:10px;background:var(--green);color:#06210d;border:none;
+       padding:12px 16px;border-radius:6px;cursor:pointer;box-shadow:0 4px 0 #1f6b32;margin-top:6px}
+  .btn:active{transform:translateY(3px);box-shadow:0 1px 0 #1f6b32}
+  .btn.alt{background:var(--blue);box-shadow:0 4px 0 #1f5fa0;color:#04203f}
+  .btn.ghost{background:transparent;color:var(--dim);box-shadow:none;border:2px solid var(--line)}
+  .x{float:right;cursor:pointer;color:var(--dim);font-size:12px}
+
+  /* sorter minigame */
+  #belt{position:relative;height:130px;background:#0a0818;border:2px solid var(--line);border-radius:6px;overflow:hidden;margin:12px 0}
+  .carton{position:absolute;width:22px;height:18px;background:var(--yellow);border:2px solid #8a6a00;border-radius:2px;top:18px}
+  .divert{position:absolute;right:6px;width:84px;height:30px;border:2px solid var(--line);border-radius:4px;font-size:7px;
+          display:flex;align-items:center;justify-content:center;color:var(--dim)}
+  .d0{top:8px}.d1{top:50px}.d2{top:92px}
+  .slugwarn{color:var(--red);font-size:9px;text-align:center;min-height:14px;margin-top:4px}
+
+  /* value select / finale */
+  .classes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:600px){.classes{grid-template-columns:1fr}}
+  .cls{background:#000;border:3px solid var(--line);border-radius:8px;padding:14px;cursor:pointer;font-size:9px;line-height:1.8;transition:border-color .1s}
+  .cls:hover{border-color:var(--gold)}
+  .cls b{color:var(--gold);font-size:10px}
+  .finale{text-align:center}
+  .finale .big{font-size:20px;color:var(--gold);line-height:1.6;margin:10px 0}
+  footer{text-align:center;font-size:8px;color:var(--dim);margin-top:34px;line-height:2}
+  .hint{text-align:center;font-size:9px;color:var(--dim);margin-top:18px}
+  a{color:var(--blue)}
+
+  /* ---- Codex / What I Learned ---- */
+  .toCodex{display:block;margin:22px auto 0;font-family:inherit;font-size:10px;background:transparent;
+           color:var(--blue);border:2px solid var(--blue);padding:10px 16px;border-radius:6px;cursor:pointer}
+  .toCodex:hover{background:var(--blue);color:#04203f}
+  .codex{margin-top:54px;border-top:3px dashed var(--line);padding-top:32px}
+  .codex h2{font-size:18px;color:var(--blue);text-align:center;text-shadow:2px 2px 0 #00000088;line-height:1.5}
+  .codex .lead{text-align:center;font-size:9px;color:var(--dim);line-height:1.9;margin:10px auto 24px;max-width:660px}
+  .diagram{display:flex;flex-direction:column;gap:10px}
+  .layer{display:flex;align-items:center;gap:12px;background:var(--panel);border:2px solid var(--line);border-radius:8px;padding:12px 14px}
+  .layer .lname{flex:0 0 92px;font-size:8px;line-height:1.6;text-align:right;color:var(--dim)}
+  .layer .chips{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+  .chip2{font-size:9px;padding:8px 10px;border-radius:5px;border:2px solid;background:#000;line-height:1.5}
+  .chip2 small{display:block;font-size:7px;color:var(--dim);margin-top:3px}
+  .arrow{color:var(--dim);font-size:11px}
+  .l-cat .chip2{border-color:var(--blue);color:var(--blue)}
+  .l-in  .chip2{border-color:#b483ff;color:#b483ff}
+  .l-wo  .chip2{border-color:var(--yellow);color:var(--yellow)}
+  .l-phys .chip2{border-color:var(--green);color:var(--green)}
+  .l-out .chip2{border-color:var(--pink);color:var(--pink)}
+  .hub{box-shadow:0 0 0 2px var(--yellow),0 0 16px var(--yellow)}
+  .star{box-shadow:0 0 12px currentColor}
+  .legend{margin-top:24px;background:#000;border:2px solid var(--line);border-radius:8px;padding:18px}
+  .legend h3{font-size:10px;color:var(--gold);margin:0 0 12px}
+  .legend .li{font-size:9px;line-height:2.1;color:var(--ink)}
+  .legend b{color:var(--green)} .legend i{color:var(--yellow);font-style:normal}
+  .lessons{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+  @media(max-width:600px){.lessons{grid-template-columns:1fr}}
+  .lesson{background:var(--panel);border:2px solid var(--line);border-left:4px solid var(--green);border-radius:6px;padding:13px;font-size:9px;line-height:1.9}
+  .lesson b{color:var(--yellow)}
+
+  /* ---- title / press start ---- */
+  .title{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;text-align:center;
+    background:radial-gradient(circle at 50% 38%,#2a1c52 0,transparent 60%),var(--bg);transition:opacity .45s}
+  .title.gone{opacity:0;pointer-events:none}
+  .tsmall{font-size:10px;color:var(--pink);margin-bottom:18px;letter-spacing:3px}
+  .tbig{font-size:52px;color:var(--yellow);text-shadow:4px 4px 0 var(--pink),8px 8px 0 #00000055;margin:0 0 20px;line-height:1.2}
+  @media(max-width:600px){.tbig{font-size:34px}}
+  .tname{font-size:14px;color:var(--green);margin-bottom:8px}
+  .tsub{font-size:9px;color:var(--dim);margin-bottom:30px;line-height:1.8}
+  .tnote{font-size:8px;color:var(--dim);margin-top:22px}
+  .title .btn{animation:blink 1.2s steps(1) infinite}
+  @keyframes blink{50%{opacity:.35}}
+
+  /* ---- stats ---- */
+  .statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:600px){.statgrid{grid-template-columns:1fr 1fr}}
+  .stat{background:var(--panel);border:2px solid var(--line);border-radius:8px;padding:18px 12px;text-align:center}
+  .stat .num{font-size:28px;color:var(--green);line-height:1.2}
+  .stat .lbl{font-size:8px;color:var(--dim);margin-top:12px;line-height:1.7}
+  .stat.p .num{color:var(--pink)} .stat.y .num{color:var(--yellow)} .stat.b .num{color:var(--blue)}
+
+  /* ---- mock label artifact ---- */
+  .mocklabel{background:#f4f4ef;color:#111;border:3px solid #000;border-radius:4px;padding:12px;
+    margin:16px auto 4px;max-width:320px;font-size:9px;line-height:1.7;font-family:ui-monospace,Menlo,monospace}
+  .ml-top{font-weight:bold;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px;display:flex;justify-content:space-between}
+  .ml-barcode{height:42px;margin:8px 0;background:repeating-linear-gradient(90deg,#000 0,#000 2px,#f4f4ef 2px,#f4f4ef 5px,#000 5px,#000 8px,#f4f4ef 8px,#f4f4ef 11px)}
+  .ml-tags{display:flex;gap:6px;margin:10px 0 4px;flex-wrap:wrap}
+  .tag-lift{background:#111;color:#fff;padding:5px 7px;border-radius:3px;font-size:8px}
+  .tag-single{border:1.5px solid #111;padding:5px 7px;border-radius:3px;font-size:8px}
+  .ml-note{font-size:8px;color:#555;margin-top:6px}
+  .ml-cap{font-size:8px;color:var(--dim);text-align:center;margin:6px 0 2px}
+</style>
+</head>
+<body>
+<div class="title" id="title">
+  <div>
+    <div class="tsmall">★ INTERN EDITION ★</div>
+    <h1 class="tbig">SHELF&nbsp;QUEST</h1>
+    <div class="tname">Lylah Liu · Summer 2026 Intern</div>
+    <div class="tsub">a journey through the amaczar warehouse</div>
+    <button class="btn" onclick="go(1)">▶ PRESS START</button>
+    <div class="tnote">tip: use your clicker / arrow keys&nbsp;→&nbsp;to advance</div>
+  </div>
+</div>
+<div class="wrap">
+  <header>
+    <h1>SHELF&nbsp;QUEST</h1>
+    <div class="sub">an intern's journey through the amaczar warehouse &nbsp;·&nbsp; press START on any level</div>
+    <div class="hud">
+      <div class="chip">LVL <b id="hudLvl">1</b></div>
+      <div class="chip">TICKETS CLEARED <b id="hudBugs">0</b></div>
+      <div class="chip">QUESTS <b id="hudQ">0</b>/6</div>
+    </div>
+    <div class="bar"><i id="xp"></i></div>
+  </header>
+
+  <section class="codex" id="codex" style="margin-top:0;border-top:none;padding-top:0">
+    <h2>📜 THE CODEX — The Map of amaczar</h2>
+    <div class="lead">
+      amaczar is a ~645-model Rails warehouse system. the real skill wasn't any one ticket —
+      it was learning how the <b style="color:var(--ink)">whole journey</b> fits together:
+      from a purchase order, to work, to a physical box, to a shipment out the door.
+    </div>
+
+    <div class="diagram">
+      <div class="layer l-cat">
+        <div class="lname">CATALOG<br>what a<br>product is</div>
+        <div class="chips">
+          <span class="chip2">Partner</span><span class="arrow">─&lt;</span>
+          <span class="chip2">Item</span><span class="arrow">─&lt;</span>
+          <span class="chip2">Listing<small>per marketplace / channel</small></span>
+          <span class="arrow">·</span>
+          <span class="chip2">Product<small>finance twin of Item</small></span>
+        </div>
+      </div>
+
+      <div class="layer l-in">
+        <div class="lname">INBOUND<br>how it<br>arrives</div>
+        <div class="chips">
+          <span class="chip2">Purchase (PO) / InventoryRequest</span>
+          <span class="arrow">──&gt; receivable ──&gt;</span>
+          <span class="chip2">InboundShipment</span>
+        </div>
+      </div>
+
+      <div class="layer l-wo">
+        <div class="lname">WORK<br>ORDER<br>what to do</div>
+        <div class="chips">
+          <span class="chip2">WorkOrder</span><span class="arrow">─&lt;</span>
+          <span class="chip2 hub">WorkOrderItem ★ the hub<small>workable → Listing OR Item</small></span>
+        </div>
+      </div>
+
+      <div class="layer l-phys">
+        <div class="lname">PHYSICAL<br>where units<br>live</div>
+        <div class="chips">
+          <span class="chip2">InventoryLocation</span>
+          <span class="chip2">TransientContainer<small>containable → box / pallet</small></span>
+          <span class="arrow">──&gt;</span>
+          <span class="chip2 star">TransientBox<small>the REAL box</small></span>
+          <span class="arrow">⇄ assign ⇄</span>
+          <span class="chip2 star">MetaphysicalBox<small>the PLANNED box</small></span>
+          <span class="chip2">WorkOrderItemResult</span>
+        </div>
+      </div>
+
+      <div class="layer l-out">
+        <div class="lname">OUTBOUND<br>how it<br>leaves</div>
+        <div class="chips">
+          <span class="chip2">Shipment<small>shippable target</small></span><span class="arrow">─&lt;</span>
+          <span class="chip2">ShipmentItem</span><span class="arrow">─&lt;</span>
+          <span class="chip2">SubShipmentItem<small>the box's slot</small></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <h3>★ THE THREE THINGS THAT FINALLY CLICKED</h3>
+      <div class="li">1 · <i>WorkOrderItem is the hub.</i> it points <b>up</b> to its product (a Listing or an Item) and <b>down</b> to its boxes &amp; results. find it and you can trace anything.</div>
+      <div class="li">2 · <i>Metaphysical vs physical.</i> a <b>MetaphysicalBox</b> is a box we <b>plan</b> to ship; a <b>TransientBox</b> is the real one we packed. <b>MetaphysicalBoxes::Assign</b> marries them — that's the file open in my editor right now. 👀</div>
+      <div class="li">3 · <i>Polymorphism is everywhere.</i> <b>workable</b> (WOI→Listing/Item), <b>containable</b> (container→box/pallet), and <b>shippable</b> (TransientBox / MetaphysicalBox / WorkOrderItemResult all → Shipment). one pattern, used all over.</div>
+    </div>
+
+    <div class="lessons">
+      <div class="lesson"><b>System thinking &gt; code.</b> the hard part was the mental model — PO → work → box → shipment — not the syntax.</div>
+      <div class="lesson"><b>Find the 10 that matter.</b> 645 models is intimidating; almost everything routes through ~10 core classes.</div>
+      <div class="lesson"><b>Names are clues.</b> "transient", "metaphysical", "shippable" — the vocabulary <i>is</i> the domain. learn the words, learn the system.</div>
+      <div class="lesson"><b>Read before you write.</b> tracing associations beat guessing every time — and made every ticket above faster.</div>
+    </div>
+  </section>
+
+  <div class="map" id="map"></div>
+
+  <div class="hint" id="hint">▶ Clear all 6 quests to unlock the BOSS.</div>
+
+  <section class="codex" id="stats">
+    <h2 style="color:var(--green)">🎮 BY THE NUMBERS</h2>
+    <div class="lead">a summer of shipping, in stats.</div>
+    <div class="statgrid">
+      <div class="stat"><div class="num" data-to="72" data-prefix="~">0</div><div class="lbl">tickets shipped</div></div>
+      <div class="stat b"><div class="num" data-to="37">0</div><div class="lbl">stow tool tickets</div></div>
+      <div class="stat y"><div class="num" data-to="11">0</div><div class="lbl">carton receive tickets</div></div>
+      <div class="stat p"><div class="num" data-to="7">0</div><div class="lbl">production errors resolved</div></div>
+      <div class="stat"><div class="num" data-to="13">0</div><div class="lbl">launch support &amp; ops tickets</div></div>
+      <div class="stat y"><div class="num" data-to="1">0</div><div class="lbl">polymorphic refactor (boss)</div></div>
+    </div>
+
+    <div class="legend" id="thanks" style="margin-top:26px;text-align:center;border-color:var(--gold)">
+      <h3 style="color:var(--gold)">🎉 GG — THANK YOU</h3>
+      <div class="li">to the Enchantment / Distribute team — Josh, Jonathan, Gavin, Kumari, Jacob, Vasilii &amp; the whole QA crew — for the bugs, the reviews, and a genuinely great summer.</div>
+      <div class="li" style="color:var(--dim)">…questions? 🎤</div>
+    </div>
+  </section>
+
+  <footer>
+    SHELF QUEST · built for the intern closing presentation · narrate left-to-right, click a level, land the punchline, move on.<br>
+    real tickets, real bugs, real summer.
+  </footer>
+</div>
+
+<div class="scrim" id="scrim">
+  <div class="card" id="card"></div>
+</div>
+
+<script>
+/* ---------- THE QUEST LOG (your real tickets, curated) ---------- */
+const LEVELS = [
+  {
+    id:'stow-api', icon:'🧩', name:'Stow Tool: The API Build', tag:'the contract behind the scanner',
+    title:'LVL 1 — Stow Tool: The API Build',
+    quip:'before the app can scan anything, someone has to define what "scan" means. that someone was me.',
+    rows:[
+      ['Quest','Shipped the backend contract the Stow Tool scans against: <b>/stow/scan_source_container</b>, <b>/stow/scan_destination_container</b>, <b>/stow/scan_item</b>, <b>/stow</b>, <b>/stow/mark_empty</b> — plus new <b>BE: Stow History</b> and <b>BE: Exception Stow</b> endpoints.'],
+      ['Guardrails','<b>BE: Verify Mixed lots validation</b> and <b>BE: Add configurable qty threshold</b>, so scan_item can reject a bad scan before it ever reaches a shelf.'],
+      ['Cleanup','<b>Only Include lot_counts with Quantities &gt; 0 for GET /scan_source_container</b> — nobody needs to see a lot with zero units left in it.']
+    ],
+    punch:'"requires_expiration_date": true,\n"requires_lot_number": true,\n"is_hazmat": true,\n"requires_cold_storage": true\n\nfour booleans, one scan_item response,\nand a validation bug hiding behind each one.',
+    bugs:5
+  },
+  {
+    id:'stow-containers', icon:'🚚', name:'Stow Tool: Any Container', tag:'breaking the "it\'s always a PCL" assumption', mini:true,
+    title:'LVL 2 — Stow Tool: Any Container',
+    quip:'the tool was built assuming every source was a PCL. reality had other plans.',
+    rows:[
+      ['Quest','<b>Stow from any container</b>, <b>Add new source container types</b>, and <b>Add OutboundPallet To Source Container Types</b> — pallets, totes, and problem-solve carts all needed to scan the same way a PCL does.'],
+      ['Follow-through','<b>Persistent container unexpected item handling</b> and <b>Remove assumptions on transient carton source containers</b> — persistent and transient containers needed genuinely different rules, not one rule half-working for both.'],
+      ['Exception stow cleanup','<b>ContainerRelocationStow</b>: remove item_id requirement, remove movement validation, do not allow unit PSL — so relocating a whole container stops getting blocked by rules meant for single-unit stows.'],
+      ['Safety rails','<b>Block Stowing Container to The Same Container</b> in the first screen, <b>Disable Scan for markEmptied PPL for Stow</b>, and a fix for <b>Mark Unexpected Item In Return Tote</b> erroring when adding more items.'],
+      ['Scan routing','<b>DRAFT: Multipack/Bundle/Component Item Scan Flexibility</b> — singles, bundles, and multipacks can\'t all be scanned the same way. try the router below. 👇']
+    ],
+    punch:'a PCL, a pallet, and a problem-solve cart walk into\n/scan_source_container. the endpoint isn\'t allowed\nto ask which one it is.',
+    bugs:12
+  },
+  {
+    id:'stow-qa', icon:'🐛', name:'Stow Tool: QA Gauntlet', tag:'~20 bugs, one tool',
+    title:'LVL 3 — Stow Tool: QA Gauntlet',
+    quip:'every workflow eventually meets QA. this one met QA about twenty times.',
+    rows:[
+      ['Container state bugs','A container marked empty could still be scanned into Stow (marked-empty PCLs and PPLs both slipping through) — and marking one empty sometimes threw an error instead of succeeding.'],
+      ['Problem-solve flow','Scanning an MCL said "container not found" instead of offering to problem-solve it; scanning an invalid PS container gave no way to scan a new one; partial stow on a problem-solve tray; Desktop Problem Solve numbers not rendering.'],
+      ['Cycle counts &amp; quantities','Stowing more than the PCL called for was silently closing the cycle count instead of leaving it open; <b>Stow Mark Empty: Detect quantity mismatches for persistent containers</b> closed the same gap on the persistent side.'],
+      ['Casepack barcode','Singles PCLs were showing a casepack-barcode screen they shouldn\'t (already prepped as singles); Bundles PCLs needed to require the bundle barcode instead of a single-item scan.'],
+      ['Everything else','Stow History button not showing details; reporting an unexpected item failing on a valid PS location; a slow second final-destination-scan API; missing item details on the report-marketplace-container screen; expired items losing their expiration date on a PS-bin move; stowing twice on a single destination — plus the QA follow-up passes (<b>BE: Stow Tool QA Follow-up</b>, <b>Stow Tool Add Source Container Type: QA Followups</b>) that caught the rest.']
+    ],
+    punch:'QA: "I marked the container empty. I can still scan it.\nIt gives me an error when I try to mark it empty again."\n\nme: "so it\'s empty, but not empty-empty." 🙃',
+    bugs:20
+  },
+  {
+    id:'carton-receive', icon:'📥', name:'Carton Receive', tag:'ISL → IBL → PCL → shipment', label:true,
+    title:'LVL 4 — Carton Receive',
+    quip:'the other side of the warehouse: get a carton in the door and turn it into something stowable.',
+    rows:[
+      ['The flow','Scan ISL → Scan IBL → Scan Product Info → (Report Expired / Report Damage / Split Carton) → Prep → Scan PCL → Complete. <b>BE: Carton receive launch support</b> kept this end-to-end shippable.'],
+      ['Exceptions &amp; adjustments','<b>BE: Closing carton exceptions</b> and <b>BE: MarkEmpty - Pre-validate receipt adjustment</b> — catching bad states before they became bad inventory.'],
+      ['Scan quality','Made SSCC scan error messages specific instead of generic, fixed lots that couldn\'t be updated to "multiple," and fixed "Another user is currently finding work orders…" from blocking Receive.'],
+      ['Labels &amp; IBLs','New <b>GET /api/v4/inbound_shipments/print_damaged_ibl</b> endpoint, a cleanup job for old/extra IBLs, and the <b>WFS ZPL Sample Label</b>.'],
+      ['Launch prep','<b>Auto Receive: Test Prep for Bastian Test in Lindon</b>, plus fixing the case where the system recommended 2 units/carton but still blocked shipping 1 unit in an oversized manufacturer carton.']
+    ],
+    punch:'a carton doesn\'t know it\'s "receivable" until an ISL,\nan IBL, and a product-info scan all agree. get any one\nwrong and the box just… waits.',
+    bugs:11
+  },
+  {
+    id:'datadog', icon:'🔥', name:'Production Support: Datadog Dungeon', tag:'7 fires, 0 nils left standing',
+    title:'LVL 5 — Production Support: Datadog Dungeon',
+    quip:'a backlog of production errors nobody had time to chase. time to chase them.',
+    rows:[
+      ['Quest','<b>Go through Datadog Errors and resolve</b> — a real production backlog, not synthetic bugs.'],
+      ['The nil crew','<b>NoMethodError: undefined method `available_weight_capacity` for nil:NilClass</b>, <b>undefined method `[]` for nil:NilClass</b>, and <b>OutboundLoadable#departs_inventory?</b> delegating to a loadable that was nil.'],
+      ['Data integrity','<b>ActiveRecord::InvalidForeignKey</b> and <b>RuntimeError: No listing found for item</b> — both traced back to code assuming a relationship existed for every row.']
+    ],
+    punch:'undefined method `x` for nil:NilClass\n\nseven different stack traces, one shared root cause:\nsomething assumed a record would always be there.',
+    bugs:7
+  },
+  {
+    id:'launch-ops', icon:'🚀', name:'Launch Support &amp; Ops', tag:'TikTok, FBT, and the rest of the warehouse',
+    title:'LVL 6 — Launch Support &amp; Ops',
+    quip:'not every ticket fits a tidy category. these kept the rest of the warehouse running.',
+    rows:[
+      ['Launch support','<b>TikTok launch support</b> and <b>FBT: Error Handler</b> — new sales channels need the warehouse side ready on day one.'],
+      ['Investigations','tracked down why <b>listing_id</b> wasn\'t populating in <b>purchase_shipment_notification_items</b>; fixed <b>"Report item as lost"</b> failing with "Not enough inventory exists to make this move"; added a clear error when Prep Container hits an item with no prep plan instead of failing silently.'],
+      ['Inventory &amp; ops','<b>Virtual / Physical inventory true-up and monitor</b>, <b>Empty Transportation Options</b>, and <b>Pick cart "report empty" should create cycle counts on source bins, not ICQAs</b>.'],
+      ['Labels &amp; routing','<b>Add pallet weight to pallet groups tab in Shelf</b>, <b>Pallet Label redesign</b>, <b>Improve routing info sending for middle mile</b>, and a fix for the PCL (4x6) label failing to print after prep.'],
+      ['Research','Researched Decision Action Log functionality and defined warehouse barcode scan logging requirements — groundwork for knowing who scanned what, later.']
+    ],
+    punch:'not every ticket makes it into a category with a\nclean name. these are the ones that just needed\nto get done — and did.',
+    bugs:13
+  },
+  {
+    id:'boss', icon:'👑', name:'BOSS — Item-Level Work Orders', tag:'the polymorphic final boss', boss:true,
+    title:'👑 FINAL BOSS — Item-Level Work Orders',
+    quip:'WorkOrderItem.workable: Listing → also Item. the change that touches everything downstream.',
+    rows:[
+      ['The problem','Every work order item required an active <b>listing</b> and a <b>prep plan</b> to be processed at Receive/Pack — even for types like <b>IXFR</b> and <b>Relo</b> that don\'t need either.'],
+      ['The fix','For IXFR and Relo, work order items can now point straight at an <b>Item</b> instead of a Listing, and automatically get the "no prep" prep plan instead of requiring one to exist on a listing.'],
+      ['The battlefield','Pick batches, Receive, and every implicit "a WOI always has a listing" assumption across the app — 18–21 points of spike + implementation, shipped as <b>Work order items for items QA and launch support</b>, <b>Item-level work orders: FBM ItemShipmentCreator + deferred audit</b>, and <b>Handle Item validation differently for non-PCL source containers</b>.'],
+      ['The guardrail','<b>Cycle count getting created for NON-PCL with NO qualifying StowRequest</b> — restricted, so item-level flows don\'t spin up cycle counts nothing asked for. Also carried the work order item\'s component item IDs through.'],
+      ['The nuance','FBM work order items split by level: item-level (IXFR, Chewy) get the "no prep" plan; listing-level (DTC) still use the listing\'s prep plan. Coordinated with Sushil on Continuum, since Grant\'s process could also generate item-level WOIs.']
+    ],
+    punch:'started the summer making sure a listing always exists.\nended it building the path for when one doesn\'t. 📈\n\nGG.',
+    bugs:4, win:true
+  }
+];
+
+/* ---------- state ---------- */
+const done = new Set();
+let bugs = 0;
+
+const map = document.getElementById('map');
+const scrim = document.getElementById('scrim');
+const card = document.getElementById('card');
+
+function bossUnlocked(){ return LEVELS.filter(l=>!l.boss).every(l=>done.has(l.id)); }
+
+function render(){
+  map.innerHTML='';
+  LEVELS.forEach((l,i)=>{
+    const n=document.createElement('div');
+    const locked = l.boss && !bossUnlocked();
+    n.className='node'+(l.boss?' boss':'')+(done.has(l.id)?' done':'')+(locked?' locked':'');
+    n.innerHTML=`<span class="lvlno">${l.boss?'BOSS':'LVL '+(i+1)}</span>
+      <div class="icon">${l.icon}</div>
+      <div class="name">${l.name}</div>
+      <div class="tag">${locked?'🔒 clear all quests':l.tag}</div>`;
+    n.onclick=()=>{ if(locked){ shake(n); return;} step=i+1; open(l); };
+    map.appendChild(n);
+  });
+  document.getElementById('hudBugs').textContent=bugs;
+  document.getElementById('hudQ').textContent=[...done].filter(d=>d!=='boss').length;
+  const q=[...done].filter(d=>d!=='boss').length;
+  document.getElementById('hudLvl').textContent=Math.min(q+1,7);
+  document.getElementById('xp').style.width=(q/6*100)+'%';
+  document.getElementById('hint').textContent = bossUnlocked()
+    ? '▶ BOSS UNLOCKED. finish strong.' : '▶ Clear all 6 quests to unlock the BOSS.';
+}
+
+function shake(el){ el.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:200}); }
+
+function open(l){
+  let html = `<span class="x" onclick="close_()">[X] close</span>
+    <h2>${l.title}</h2><div class="quip">${l.quip}</div>`;
+  l.rows.forEach(r=> html+=`<div class="row"><b>${r[0]}:</b> ${r[1]}</div>`);
+  if(l.mini) html+= sorterHTML();
+  if(l.label) html+= labelHTML();
+  html += `<div class="punch">${l.punch.replace(/\n/g,'<br>')}</div>`;
+  if(l.win){
+    html += `<button class="btn" onclick="finale()">⚔️ CLAIM VICTORY</button>`;
+  } else if(done.has(l.id)){
+    html += `<button class="btn ghost" onclick="close_()">already cleared — back to map</button>`;
+  } else {
+    html += `<button class="btn" onclick="clear_('${l.id}',${l.bugs})">✓ CLEAR QUEST (+${l.bugs} tickets)</button>`;
+  }
+  card.innerHTML=html;
+  scrim.classList.add('open');
+  if(l.mini) initSorter();
+}
+function clear_(id,b){ if(!done.has(id)){done.add(id);bugs+=b;} close_(); render();
+  if(bossUnlocked()) toast('🔓 BOSS UNLOCKED'); }
+function close_(){ scrim.classList.remove('open'); }
+window.close_=close_; window.clear_=clear_;
+scrim.onclick=e=>{ if(e.target===scrim) close_(); };
+
+/* ---------- sorter minigame ---------- */
+let sorterTimer=null, sorterMode='slug';
+function sorterHTML(){
+  return `<div id="belt">
+      <div class="divert d0">SINGLES</div>
+      <div class="divert d1">BUNDLE</div>
+      <div class="divert d2">MULTIPACK</div>
+    </div>
+    <div class="slugwarn" id="slugwarn">⚠ every scan is landing in the same lane…</div>
+    <button class="btn alt" onclick="deployFix()">🚀 DEPLOY FIX (route by casepack type)</button>`;
+}
+function initSorter(){ sorterMode='slug'; if(sorterTimer)clearInterval(sorterTimer);
+  const belt=document.getElementById('belt');
+  sorterTimer=setInterval(()=>{
+    if(!document.body.contains(belt)){clearInterval(sorterTimer);return;}
+    const c=document.createElement('div'); c.className='carton';
+    const lane = sorterMode==='slug' ? 0 : Math.floor(Math.random()*3);
+    c.style.top=(18+lane*42)+'px'; c.style.left='-24px';
+    belt.appendChild(c);
+    let x=-24; const step=setInterval(()=>{
+      x+=6; c.style.left=x+'px';
+      if(x>belt.clientWidth-96){ clearInterval(step);
+        if(sorterMode==='slug'){ c.style.left=(belt.clientWidth-96)+'px';
+          setTimeout(()=>c.remove(),700);
+        } else c.remove();
+      }
+    },40);
+  },220);
+}
+function deployFix(){ sorterMode='random';
+  document.getElementById('slugwarn').innerHTML='<span style="color:var(--green)">✅ FIXED: singles, bundles &amp; multipacks now route to their own lane.</span>';
+}
+window.deployFix=deployFix;
+
+/* ---------- finale: pick your Pattern value class ---------- */
+function finale(){
+  done.add('boss'); render();
+  card.innerHTML=`<span class="x" onclick="close_()">[X]</span>
+    <div class="finale"><div class="big">🏆 QUEST COMPLETE</div>
+    <div class="quip" style="margin-bottom:14px">choose the Pattern value you "lived" — your character class.<br>(swap these for the official four before you present!)</div></div>
+    <div class="classes">
+      <div class="cls" onclick="chooseClass(this,'BE BETTER THAN YESTERDAY')"><b>⚙️ The Iterator</b><br>survived ~20 stow-tool QA bugs and kept shipping. better every sprint.</div>
+      <div class="cls" onclick="chooseClass(this,'DATA FANATIC')"><b>📊 The Investigator</b><br>cleared the Datadog dungeon + trued-up phantom inventory. evidence-driven.</div>
+      <div class="cls" onclick="chooseClass(this,'CUSTOMER OBSESSED')"><b>🤝 The Outfitter</b><br>Carton Receive labels, TikTok & FBT launch support. shipped what partners needed.</div>
+      <div class="cls" onclick="chooseClass(this,'GAME CHANGER')"><b>👑 The Architect</b><br>took on the item-level work-order refactor at the core of the pipeline.</div>
+    </div>
+    <div id="chosen" class="finale" style="margin-top:16px"></div>`;
+}
+function chooseClass(el,val){
+  document.querySelectorAll('.cls').forEach(c=>c.style.borderColor='var(--line)');
+  el.style.borderColor='var(--gold)';
+  document.getElementById('chosen').innerHTML=
+    `<div class="big" style="font-size:14px">CLASS: ${val}</div>
+     <div class="quip">…and that's how I lived it. thank you! 🎤⬇️</div>`;
+}
+window.finale=finale; window.chooseClass=chooseClass;
+
+/* ---------- mock label artifact ---------- */
+function labelHTML(){
+  return `<div class="mocklabel">
+    <div class="ml-top"><span>PCL · 4x6</span><span>WFS&nbsp;ZPL</span></div>
+    <div class="ml-barcode"></div>
+    <div>IBL 000482 · LOT A19381</div>
+    <div class="ml-tags"><span class="tag-lift">DAMAGED</span><span class="tag-single">REPRINT OK</span></div>
+    <div class="ml-note">generated via print_damaged_ibl</div>
+  </div>
+  <div class="ml-cap">↑ a label I actually shipped — WFS ZPL sample + damaged-IBL reprint</div>`;
+}
+
+/* ---------- title + clicker / arrow-key tour ---------- */
+let step = 0;
+function showTitle(){ document.getElementById('title').classList.remove('gone'); }
+function hideTitle(){ document.getElementById('title').classList.add('gone'); }
+function tourOpen(idx){
+  const l = LEVELS[idx];
+  if(l && !l.boss && !done.has(l.id)){ done.add(l.id); bugs+=l.bugs; render(); }
+  if(l) open(l);
+}
+function go(s){
+  step = Math.max(0, Math.min(11, s));
+  const i = step;
+  if(i===0){ close_(); showTitle(); return; }
+  hideTitle();
+  if(i>=1 && i<=7){ window.scrollTo({top:0,behavior:'smooth'}); tourOpen(i-1); }
+  else if(i===8){ finale(); }
+  else if(i===9){ close_(); document.getElementById('codex').scrollIntoView({behavior:'smooth'}); }
+  else if(i===10){ close_(); document.getElementById('stats').scrollIntoView({behavior:'smooth'}); animateStats(); }
+  else if(i===11){ close_(); document.getElementById('thanks').scrollIntoView({behavior:'smooth'}); }
+}
+window.go = go;
+document.addEventListener('keydown', e=>{
+  if(['ArrowRight','PageDown'].includes(e.key) || e.key===' '){ e.preventDefault(); go(step+1); }
+  else if(['ArrowLeft','PageUp'].includes(e.key)){ e.preventDefault(); go(step-1); }
+  else if(e.key==='Escape'){ close_(); }
+});
+
+/* ---------- animated stat counters ---------- */
+function animateStats(){
+  document.querySelectorAll('#stats .num').forEach(el=>{
+    if(el.dataset.done) return; el.dataset.done='1';
+    const to=+el.dataset.to, pre=el.dataset.prefix||'', suf=el.dataset.suffix||'', t0=performance.now();
+    (function tick(t){
+      const p=Math.min(1,(t-t0)/900), v=Math.floor(to*(1-Math.pow(1-p,3)));
+      el.textContent=pre+v.toLocaleString()+suf;
+      if(p<1) requestAnimationFrame(tick);
+    })(t0);
+  });
+}
+if('IntersectionObserver' in window){
+  const obs=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ animateStats(); } }),{threshold:.3});
+  const s=document.getElementById('stats'); if(s) obs.observe(s);
+}
+
+/* ---------- tiny toast ---------- */
+function toast(msg){
+  const t=document.createElement('div'); t.textContent=msg;
+  t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#000;border:2px solid var(--green);color:var(--green);padding:12px 18px;border-radius:6px;font-size:10px;z-index:40';
+  document.body.appendChild(t); setTimeout(()=>t.remove(),1800);
+}
+
+render();
+</script>
+</body>
+</html>
