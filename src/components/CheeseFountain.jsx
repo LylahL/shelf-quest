@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-const COUNT = 12;
+const COUNT = 18;
 
 function rand(min, max) {
   return Math.random() * (max - min) + min;
@@ -11,8 +11,9 @@ export default function CheeseFountain() {
     () =>
       Array.from({ length: COUNT }, (_, i) => ({
         id: i,
-        left: rand(28, 72),
-        size: rand(22, 34),
+        type: i % 2 === 0 ? 'cheese' : 'apple',
+        left: rand(24, 76),
+        size: rand(20, 32),
         dx: rand(-70, 70),
         rise: rand(180, 320),
         duration: rand(2.8, 4.6),
@@ -26,7 +27,7 @@ export default function CheeseFountain() {
       {pieces.map((p) => (
         <span
           key={p.id}
-          className="cheese-piece"
+          className={`fruit-piece ${p.type}`}
           style={{
             left: `${p.left}%`,
             width: p.size,

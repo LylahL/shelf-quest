@@ -17,21 +17,35 @@ body{
 }
 .wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px;position:relative;z-index:1}
 
-/* ---- cheese fountain (easter egg) ---- */
+/* ---- cheese + apple fountain (easter egg) ---- */
 .cheese-fountain{position:fixed;left:0;right:0;bottom:0;height:0;z-index:0;pointer-events:none;overflow:visible}
-.cheese-piece{
+.fruit-piece{
   position:absolute;bottom:-10px;border-radius:50%;
-  background:radial-gradient(circle at 32% 28%, #ff6b57 0%, #e2241c 55%, #a30f0f 100%);
   box-shadow:inset -3px -3px 0 rgba(0,0,0,.25), 0 3px 6px rgba(0,0,0,.4);
   animation-name:cheese-launch;animation-timing-function:ease-in-out;animation-iteration-count:infinite;
 }
-.cheese-piece::before{
+.fruit-piece.cheese{
+  background:radial-gradient(circle at 32% 28%, #ff6b57 0%, #e2241c 55%, #a30f0f 100%);
+}
+.fruit-piece.cheese::before{
   content:'';position:absolute;top:-22%;left:50%;width:34%;height:34%;
   background:#c41414;border-radius:40% 40% 50% 50%;transform:translateX(-50%) rotate(45deg);
 }
-.cheese-piece::after{
+.fruit-piece.cheese::after{
   content:'';position:absolute;left:20%;bottom:14%;width:60%;height:26%;
   background:#ffe9a8;border-radius:50%;opacity:.9;
+}
+.fruit-piece.apple{
+  background:radial-gradient(circle at 30% 25%, #ffe37a 0%, #ff5b3d 45%, #c81f2c 100%);
+  border-radius:48% 52% 50% 50% / 55% 55% 45% 45%;
+}
+.fruit-piece.apple::before{
+  content:'';position:absolute;top:-30%;left:48%;width:10%;height:34%;
+  background:#7a4a23;border-radius:2px;transform:rotate(-8deg);
+}
+.fruit-piece.apple::after{
+  content:'';position:absolute;top:-20%;left:52%;width:38%;height:26%;
+  background:#4fae4a;border-radius:70% 30% 70% 30%;transform:rotate(20deg);
 }
 @keyframes cheese-launch{
   0%{transform:translate(0,0) rotate(0deg);opacity:0}
