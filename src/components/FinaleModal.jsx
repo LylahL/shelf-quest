@@ -2,9 +2,9 @@ import { useState } from 'react';
 
 const CLASSES = [
   { value: '👑 GAME CHANGERS', valueDesc: 'go after the change that moves the whole system, not just the ticket.', desc: 'took on the item-level work-order refactor at the core of the pipeline.' },
-  { value: '📊 DATA FANATICS', valueDesc: 'let the evidence settle it — numbers over opinions.', desc: 'cleared the Datadog dungeon + trued-up phantom inventory. evidence-driven.' },
-  { value: '⚙️ TEAM OF DOERS', valueDesc: 'get it done, then get it better — action over analysis paralysis.', desc: 'survived ~20 stow-tool QA bugs and kept shipping. better every sprint.' },
-  { value: '🤝 PARTNER OBSESSION', valueDesc: "the partner's problem is our problem — build around what they actually need.", desc: 'Carton Receive labels, TikTok & FBT launch support. shipped what partners needed.' },
+  { value: '📊 DATA FANATICS', valueDesc: 'let the evidence settle it — numbers over opinions.', desc: 'cleared the Datadog dungeon + trued-up phantom inventory.' },
+  { value: '⚙️ TEAM OF DOERS', valueDesc: 'get it done, then get it better — action over analysis paralysis.', desc: "survived stow-tool QA bugs and kept shipping. not yet survived Carton Receive's UAT." },
+  { value: '🤝 PARTNER OBSESSION', valueDesc: "the partner's problem is our problem — build around what they actually need.", desc: '' },
 ];
 
 export default function FinaleModal({ onClose }) {
@@ -30,8 +30,7 @@ export default function FinaleModal({ onClose }) {
             <b>{c.value}</b>
             <br />
             <span style={{ color: 'var(--dim)', fontStyle: 'italic' }}>{c.valueDesc}</span>
-            <br />
-            {c.desc}
+            {c.desc && <><br />{c.desc}</>}
           </div>
         ))}
       </div>
