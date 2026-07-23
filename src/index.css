@@ -1,5 +1,5 @@
 :root{
-  --bg:#0d0b1f; --panel:#1a1730; --ink:#e8e6ff; --dim:#9b94c9;
+  --bg:#322769; --panel:#1a1730; --ink:#e8e6ff; --dim:#9b94c9;
   --green:#5ee07a; --pink:#ff5fa2; --yellow:#ffd34e; --blue:#4ea8ff;
   --red:#ff5b5b; --gold:#ffcf3f; --line:#37315e;
 }
@@ -7,8 +7,8 @@
 html,body,#root{margin:0;height:100%}
 body{
   background:
-    radial-gradient(circle at 20% 10%, #221b45 0, transparent 40%),
-    radial-gradient(circle at 80% 80%, #2a1640 0, transparent 45%),
+    radial-gradient(circle at 20% 10%, #453590 0, transparent 40%),
+    radial-gradient(circle at 80% 80%, #413389 0, transparent 45%),
     var(--bg);
   color:var(--ink);
   font-family:'Press Start 2P', ui-monospace, Menlo, Consolas, monospace;
@@ -116,7 +116,7 @@ a{color:var(--blue)}
 
 /* ---- title / press start ---- */
 .title{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;text-align:center;
-  background:radial-gradient(circle at 50% 38%,#2a1c52 0,transparent 60%),var(--bg);transition:opacity .45s}
+  background:radial-gradient(circle at 50% 38%,#4a399b 0,transparent 60%),var(--bg);transition:opacity .45s}
 .title.gone{opacity:0;pointer-events:none}
 .tsmall{font-size:10px;color:var(--pink);margin-bottom:18px;letter-spacing:3px}
 .tbig{font-size:52px;color:var(--yellow);text-shadow:4px 4px 0 var(--pink),8px 8px 0 #00000055;margin:0 0 20px;line-height:1.2}
