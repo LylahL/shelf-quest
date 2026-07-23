@@ -66,9 +66,8 @@ export default function CodexSection({ sectionRef }) {
       </div>
 
       <div className="legend">
-        <h3>★ THE THREE THINGS THAT FINALLY CLICKED</h3>
         <div className="li">1 · <i>WorkOrderItem is the hub.</i> it points <b>up</b> to its product (a Listing or an Item) and <b>down</b> to its boxes &amp; results. find it and you can trace anything.</div>
-        <div className="li">2 · <i>Metaphysical vs physical.</i> a <b>MetaphysicalBox</b> is a box we <b>plan</b> to ship; a <b>TransientBox</b> is the real one we packed. <b>MetaphysicalBoxes::Assign</b> marries them — that's the file open in my editor right now. 👀</div>
+        <div className="li">2 · <i>Metaphysical vs physical.</i> a <b>MetaphysicalBox</b> is a box we <b>plan</b> to ship; a <b>TransientBox</b> is the real one we packed. <b>MetaphysicalBoxes::Assign</b> marries them</div>
         <div className="li">3 · <i>Polymorphism is everywhere.</i> <b>workable</b> (WOI→Listing/Item), <b>containable</b> (container→box/pallet), and <b>shippable</b> (TransientBox / MetaphysicalBox / WorkOrderItemResult all → Shipment). one pattern, used all over.</div>
       </div>
 
