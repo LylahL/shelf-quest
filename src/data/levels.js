@@ -71,7 +71,6 @@ const LEVELS = [
     title: 'LVL 6 — Launch Support & Ops',
     quip: 'not every ticket fits a tidy category. these kept the rest of the warehouse running.',
     rows: [
-      ['Launch support', '<b>TikTok launch support</b> and <b>FBT: Error Handler</b> — new sales channels need the warehouse side ready on day one.'],
       ['Investigations', 'tracked down why <b>listing_id</b> wasn\'t populating in <b>purchase_shipment_notification_items</b>; fixed <b>"Report item as lost"</b> failing with "Not enough inventory exists to make this move"; added a clear error when Prep Container hits an item with no prep plan instead of failing silently.'],
       ['Inventory & ops', '<b>Virtual / Physical inventory true-up and monitor</b>, <b>Empty Transportation Options</b>, and <b>Pick cart "report empty" should create cycle counts on source bins, not ICQAs</b>.'],
       ['Labels & routing', '<b>Add pallet weight to pallet groups tab in Shelf</b>, <b>Pallet Label redesign</b>, <b>Improve routing info sending for middle mile</b>, and a fix for the PCL (4x6) label failing to print after prep.'],
