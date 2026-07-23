@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
 const CLASSES = [
-  { value: 'TEAM OF DOERS', title: '⚙️ The Iterator', valueDesc: 'get it done, then get it better — action over analysis paralysis.', desc: 'survived ~20 stow-tool QA bugs and kept shipping. better every sprint.' },
-  { value: 'DATA FANATICS', title: '📊 The Investigator', valueDesc: 'let the evidence settle it — numbers over opinions.', desc: 'cleared the Datadog dungeon + trued-up phantom inventory. evidence-driven.' },
-  { value: 'PARTNER OBSESSION', title: '🤝 The Outfitter', valueDesc: "the partner's problem is our problem — build around what they actually need.", desc: 'Carton Receive labels, TikTok & FBT launch support. shipped what partners needed.' },
-  { value: 'GAME CHANGERS', title: '👑 The Architect', valueDesc: 'go after the change that moves the whole system, not just the ticket.', desc: 'took on the item-level work-order refactor at the core of the pipeline.' },
+  { value: '👑 GAME CHANGERS', valueDesc: 'go after the change that moves the whole system, not just the ticket.', desc: 'took on the item-level work-order refactor at the core of the pipeline.' },
+  { value: '📊 DATA FANATICS', valueDesc: 'let the evidence settle it — numbers over opinions.', desc: 'cleared the Datadog dungeon + trued-up phantom inventory. evidence-driven.' },
+  { value: '⚙️ TEAM OF DOERS', valueDesc: 'get it done, then get it better — action over analysis paralysis.', desc: 'survived ~20 stow-tool QA bugs and kept shipping. better every sprint.' },
+  { value: '🤝 PARTNER OBSESSION', valueDesc: "the partner's problem is our problem — build around what they actually need.", desc: 'Carton Receive labels, TikTok & FBT launch support. shipped what partners needed.' },
 ];
 
 export default function FinaleModal({ onClose }) {
@@ -16,7 +16,7 @@ export default function FinaleModal({ onClose }) {
       <div className="finale">
         <div className="big">🏆 QUEST COMPLETE</div>
         <div className="quip" style={{ marginBottom: 14 }}>
-          choose the Pattern value you "lived" — your character class.
+          choose the Pattern value you "lived" this summer.
         </div>
       </div>
       <div className="classes">
@@ -27,9 +27,7 @@ export default function FinaleModal({ onClose }) {
             style={{ borderColor: chosen === c.value ? 'var(--gold)' : 'var(--line)' }}
             onClick={() => setChosen(c.value)}
           >
-            <b>{c.title}</b>
-            <br />
-            <span style={{ color: 'var(--gold)', fontSize: 8, letterSpacing: 1 }}>{c.value}</span>
+            <b>{c.value}</b>
             <br />
             <span style={{ color: 'var(--dim)', fontStyle: 'italic' }}>{c.valueDesc}</span>
             <br />

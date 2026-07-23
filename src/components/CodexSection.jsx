@@ -72,10 +72,10 @@ export default function CodexSection({ sectionRef }) {
       </div>
 
       <div className="lessons">
-        <div className="lesson"><b>System thinking &gt; code.</b> the hard part was the mental model — PO → work → box → shipment — not the syntax.</div>
-        <div className="lesson"><b>Find the 10 that matter.</b> 645 models is intimidating; almost everything routes through ~10 core classes.</div>
-        <div className="lesson"><b>Names are clues.</b> "transient", "metaphysical", "shippable" — the vocabulary <i>is</i> the domain. learn the words, learn the system.</div>
-        <div className="lesson"><b>Read before you write.</b> tracing associations beat guessing every time — and made every ticket above faster.</div>
+        <div className="lesson"><b>Understand before you accept.</b> Claude can write the diff in seconds — but if you don't trace what WorkOrderItem.workable touches upstream and down before merging, you've just outsourced the bug too.</div>
+        <div className="lesson"><b>Ask why, not just how.</b> every suggestion — mine or Claude's — has to answer a product question first: who's blocked, what does this unblock, what does the business actually need. the code is just the last step.</div>
+        <div className="lesson"><b>Trace the blast radius.</b> a change to MetaphysicalBoxes::Assign doesn't stay in that file — know what feeds it and what it feeds before you touch it, whether you wrote the line or Claude did.</div>
+        <div className="lesson"><b>You ship it, you own it.</b> an AI suggestion that breaks TransientBox in prod is still your bug — reviewing for why, not just does it compile, is what makes the difference.</div>
       </div>
     </section>
   );
