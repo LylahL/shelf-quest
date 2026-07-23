@@ -1,0 +1,43 @@
+import { useMemo } from 'react';
+
+const COUNT = 12;
+
+function rand(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+export default function CheeseFountain() {
+  const pieces = useMemo(
+    () =>
+      Array.from({ length: COUNT }, (_, i) => ({
+        id: i,
+        left: rand(28, 72),
+        size: rand(22, 34),
+        dx: rand(-70, 70),
+        rise: rand(180, 320),
+        duration: rand(2.8, 4.6),
+        delay: rand(0, 4),
+      })),
+    [],
+  );
+
+  return (
+    <div className="cheese-fountain" aria-hidden="true">
+      {pieces.map((p) => (
+        <span
+          key={p.id}
+          className="cheese-piece"
+          style={{
+            left: `${p.left}%`,
+            width: p.size,
+            height: p.size,
+            '--dx': `${p.dx}px`,
+            '--rise': `${p.rise}px`,
+            animationDuration: `${p.duration}s`,
+            animationDelay: `${p.delay}s`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}

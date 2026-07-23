@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import LEVELS from './data/levels';
 import TitleScreen from './components/TitleScreen';
+import CheeseFountain from './components/CheeseFountain';
 import Header from './components/Header';
 import CodexSection from './components/CodexSection';
 import LevelMap from './components/LevelMap';
@@ -126,6 +127,7 @@ export default function App() {
 
   return (
     <>
+      <CheeseFountain />
       <TitleScreen visible={titleVisible} onStart={() => go(1)} />
       <div className="wrap">
         <Header lvl={lvl} tickets={tickets} quests={questsCleared} xpPercent={xpPercent} />
