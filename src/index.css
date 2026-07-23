@@ -66,12 +66,18 @@ h1{font-size:30px;line-height:1.4;margin:0 0 6px;color:var(--yellow);
 .btn.ghost{background:transparent;color:var(--dim);box-shadow:none;border:2px solid var(--line)}
 .x{float:right;cursor:pointer;color:var(--dim);font-size:12px}
 
-/* sorter minigame */
-#belt{position:relative;height:130px;background:#0a0818;border:2px solid var(--line);border-radius:6px;overflow:hidden;margin:12px 0}
-.carton{position:absolute;width:22px;height:18px;background:var(--yellow);border:2px solid #8a6a00;border-radius:2px;top:18px}
-.divert{position:absolute;right:6px;width:84px;height:30px;border:2px solid var(--line);border-radius:4px;font-size:7px;
-        display:flex;align-items:center;justify-content:center;color:var(--dim)}
-.d0{top:8px}.d1{top:50px}.d2{top:92px}
+/* any-container-gate minigame */
+.gatelane{position:relative;height:130px;background:#0a0818;border:2px solid var(--line);border-radius:6px;overflow:hidden;margin:12px 0}
+.gatepost{position:absolute;top:0;bottom:0;left:50%;width:0;border-left:2px dashed var(--line);transform:translateX(-1px)}
+.gatepost span{position:absolute;top:6px;left:8px;font-size:7px;color:var(--dim);white-space:nowrap}
+.ctoken{position:absolute;width:52px;height:26px;margin-top:-13px;border-radius:4px;display:flex;align-items:center;justify-content:center;
+        font-size:8px;color:#06210d;font-weight:bold;border:2px solid rgba(0,0,0,.35);transition:box-shadow .15s}
+.ctoken-pcl{background:var(--green)}
+.ctoken-plt{background:var(--yellow)}
+.ctoken-tote{background:var(--blue)}
+.ctoken-cart{background:var(--pink)}
+.ctoken-pass{box-shadow:0 0 10px var(--green)}
+.ctoken-reject{box-shadow:0 0 10px var(--red);filter:grayscale(.35)}
 .slugwarn{color:var(--red);font-size:9px;text-align:center;min-height:14px;margin-top:4px}
 
 /* value select / finale */

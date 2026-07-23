@@ -17,11 +17,11 @@ const LEVELS = [
     title: 'LVL 2 — Stow Tool: Any Container',
     quip: 'the tool was built assuming every source was a PCL. reality had other plans.',
     rows: [
-      ['Quest', '<b>Stow from any container</b>, <b>Add new source container types</b>, and <b>Add OutboundPallet To Source Container Types</b> — pallets, totes, and problem-solve carts all needed to scan the same way a PCL does.'],
+      ['Quest', '<b>Stow from any container</b>, <b>Add new source container types</b>, and <b>Add OutboundPallet To Source Container Types</b> — pallets, totes, and problem-solve carts all needed to scan the same way a PCL does. try the gate below. 👇'],
       ['Follow-through', '<b>Persistent container unexpected item handling</b> and <b>Remove assumptions on transient carton source containers</b> — persistent and transient containers needed genuinely different rules, not one rule half-working for both.'],
       ['Exception stow cleanup', '<b>ContainerRelocationStow</b>: remove item_id requirement, remove movement validation, do not allow unit PSL — so relocating a whole container stops getting blocked by rules meant for single-unit stows.'],
       ['Safety rails', '<b>Block Stowing Container to The Same Container</b> in the first screen, <b>Disable Scan for markEmptied PPL for Stow</b>, and a fix for <b>Mark Unexpected Item In Return Tote</b> erroring when adding more items.'],
-      ['Scan routing', '<b>DRAFT: Multipack/Bundle/Component Item Scan Flexibility</b> — singles, bundles, and multipacks can\'t all be scanned the same way. try the router below. 👇'],
+      ['Scan routing', '<b>DRAFT: Multipack/Bundle/Component Item Scan Flexibility</b> — singles, bundles, and multipacks can\'t all be scanned the same way either, though that\'s a separate fight from container type.'],
     ],
     punch: 'a PCL, a pallet, and a problem-solve cart walk into\n/scan_source_container. the endpoint isn\'t allowed\nto ask which one it is.',
     bugs: 12,

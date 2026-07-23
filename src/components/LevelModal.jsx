@@ -1,5 +1,5 @@
 import Html from './Html';
-import CasepackRouter from './CasepackRouter';
+import AnyContainerGate from './AnyContainerGate';
 import MockLabel from './MockLabel';
 
 export default function LevelModal({ level, isDone, onClear, onClose, onClaimVictory }) {
@@ -11,7 +11,7 @@ export default function LevelModal({ level, isDone, onClear, onClose, onClaimVic
       {level.rows.map(([label, text], i) => (
         <Html key={i} as="div" className="row" html={`<b>${label}:</b> ${text}`} />
       ))}
-      {level.mini && <CasepackRouter />}
+      {level.mini && <AnyContainerGate />}
       {level.label && <MockLabel />}
       <div className="punch" style={{ whiteSpace: 'pre-line' }}>{level.punch}</div>
       {level.win ? (
