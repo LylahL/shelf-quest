@@ -4,6 +4,8 @@ const STATS = [
   { to: 16840, prefix: '', label: 'lines added', cls: '' },
   { to: 12598, prefix: '', label: 'lines deleted', cls: 'p' },
   { to: 29438, prefix: '', label: 'total changed (add+del)', cls: 'y' },
+  { to: 29, prefix: '', label: 'commits in the past 3 months', cls: 'b' },
+  { to: 72, prefix: '~', label: 'tickets shipped', cls: '' },
 ];
 
 const StatsSection = forwardRef(function StatsSection({ thanksRef }, ref) {
