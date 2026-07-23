@@ -3,9 +3,14 @@ export default function CodexSection({ sectionRef }) {
     <section className="codex codex-top" ref={sectionRef}>
       <h2>📜 The Map of amaczar</h2>
       <div className="lead">
-        amaczar is a ~645-model Rails warehouse system. the real skill wasn't any one ticket —
-        it was learning how the <b style={{ color: 'var(--ink)' }}>whole journey</b> fits together:
-        from a purchase order, to work, to a physical box, to a shipment out the door.
+        Shelf is Pattern's internal warehouse operations system — it's the software that runs the
+        day-to-day work inside a physical fulfillment center, covering everything from receiving
+        inventory as it arrives, to stowing it in the right storage location, prepping it to meet
+        different retailers' requirements (Amazon, Walmart, TikTok, Chewy, etc.), and picking/packing/shipping
+        customer orders back out, all while keeping inventory counts accurate along the way. It's the
+        operational backbone that lets Pattern run warehouses for the brands it manages, coordinating
+        people, barcode scanners, and physical inventory so products move correctly from "supplier
+        shipped it" to "customer received it" across many different sales channels.
       </div>
 
       <div className="diagram">
