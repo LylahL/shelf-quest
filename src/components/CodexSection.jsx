@@ -1,7 +1,7 @@
 export default function CodexSection({ sectionRef }) {
   return (
     <section className="codex codex-top" ref={sectionRef}>
-      <h2>📜 THE CODEX — The Map of amaczar</h2>
+      <h2>📜 The Map of amaczar</h2>
       <div className="lead">
         amaczar is a ~645-model Rails warehouse system. the real skill wasn't any one ticket —
         it was learning how the <b style={{ color: 'var(--ink)' }}>whole journey</b> fits together:
