@@ -1,12 +1,9 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 const STATS = [
-  { to: 72, prefix: '~', label: 'tickets shipped', cls: '' },
-  { to: 37, prefix: '', label: 'stow tool tickets', cls: 'b' },
-  { to: 11, prefix: '', label: 'carton receive tickets', cls: 'y' },
-  { to: 7, prefix: '', label: 'production errors resolved', cls: 'p' },
-  { to: 13, prefix: '', label: 'launch support & ops tickets', cls: '' },
-  { to: 1, prefix: '', label: 'polymorphic refactor (boss)', cls: 'y' },
+  { to: 16840, prefix: '', label: 'lines added', cls: '' },
+  { to: 12598, prefix: '', label: 'lines deleted', cls: 'p' },
+  { to: 29438, prefix: '', label: 'total changed (add+del)', cls: 'y' },
 ];
 
 const StatsSection = forwardRef(function StatsSection({ thanksRef }, ref) {
