@@ -27,7 +27,7 @@ const LEVELS = [
     bugs: 12,
   },
   {
-    id: 'stow-qa', icon: '🐛', name: 'Stow Tool: QA Gauntlet', tag: '~20 bugs, one tool',
+    id: 'stow-qa', icon: '🐛', name: 'Stow Tool: QA Gauntlet', tag: 'so many bugs, one tool',
     title: 'LVL 3 — Stow Tool: QA Gauntlet',
     quip: 'every workflow eventually meets QA. this one met QA about twenty times.',
     rows: [
@@ -67,7 +67,7 @@ const LEVELS = [
     bugs: 7,
   },
   {
-    id: 'launch-ops', icon: '🚀', name: 'Launch Support & Ops', tag: 'TikTok, FBT, and the rest of the warehouse',
+    id: 'launch-ops', icon: '🚀', name: 'Launch Support & Ops', tag: 'keeping the rest of the warehouse running',
     title: 'LVL 6 — Launch Support & Ops',
     quip: 'not every ticket fits a tidy category. these kept the rest of the warehouse running.',
     rows: [
