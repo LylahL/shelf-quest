@@ -58,7 +58,7 @@ const StatsSection = forwardRef(function StatsSection({ thanksRef }, ref) {
 
       <div className="legend" ref={thanksRef} style={{ marginTop: 26, textAlign: 'center', borderColor: 'var(--gold)' }}>
         <h3 style={{ color: 'var(--gold)' }}>🎉 GG — THANK YOU</h3>
-        <div className="li">to the Enchantment / Distribute team — Josh, Jonathan, Gavin, Kumari, Jacob, Vasilii & the whole QA crew — for the bugs, the reviews, and a genuinely great summer.</div>
+        <div className="li">to the Enchantment / Distribute team — Josh, Jonathan, Austin, Dart, Vasilii, Matt, Nate & the whole QA crew, Priyanka and Sujay — for the bugs, the reviews, and a genuinely great summer.</div>
         <div className="li" style={{ color: 'var(--dim)' }}>…questions? 🎤</div>
       </div>
     </section>

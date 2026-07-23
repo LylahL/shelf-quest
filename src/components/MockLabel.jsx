@@ -11,7 +11,7 @@ export default function MockLabel() {
         </div>
         <div className="ml-note">generated via print_damaged_ibl</div>
       </div>
-      <div className="ml-cap">↑ a label I actually shipped — WFS ZPL sample + damaged-IBL reprint</div>
+      <div className="ml-cap">↑ a label for decoration purposes — WFS ZPL sample + damaged-IBL reprint</div>
     </>
   );
 }
